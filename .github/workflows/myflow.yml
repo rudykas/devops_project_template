@@ -38,5 +38,3 @@ jobs:
             --region=europe-west6 \
             --format='value(status.url)')
           echo "Service is running at: $SERVICE_URL"
-
-              
