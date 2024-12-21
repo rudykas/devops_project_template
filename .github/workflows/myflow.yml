@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: 'read'
-      id-token: 'write'
+      id-token: 'write'  # Necessary for OIDC token generation
     steps:
       - name: Get code
         uses: actions/checkout@v4.2.2
@@ -14,13 +14,13 @@ jobs:
       - name: Authenticate Google Cloud
         uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: "projects/144447625768/locations/global/workloadIdentityPools/github/providers/my-repo"
-          service_account: "144447625768-compute@developer.gserviceaccount.com"
+          workload_identity_provider: "${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}"
+          service_account: "${{ secrets.GCP_SERVICE_ACCOUNT_EMAIL }}"
       
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
         with:
-          project_id: devops-team-14-863342
+          project_id: "${{ secrets.GCP_PROJECT_ID }}"
           install_components: 'run'
       
       - name: Deploy to Cloud Run
@@ -39,3 +39,4 @@ jobs:
             --format='value(status.url)')
           echo "Service is running at: $SERVICE_URL"
 
+              
